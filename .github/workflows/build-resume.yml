@@ -1,0 +1,32 @@
+name: Build Resume PDF
+
+# Trigger on tag pushes (e.g. v1.0.0) or manually from the Actions tab.
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write # allow creating the GitHub Release / attaching the PDF
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Compile LaTeX resume
+        uses: xu-cheng/texlive-action@v2
+        with:
+          scheme: full # full TeX Live so every package (fontawesome5, paracol, etc.) is present
+          run: |
+            latexmk -pdf -interaction=nonstopmode resume.tex
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Resume ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
+          files: resume.pdf
