@@ -1,0 +1,309 @@
+﻿% =====================================================================
+%  Adem Can - Resume / CV
+%  Compile with:  latexmk -pdf resume.tex   (or: pdflatex resume.tex)
+% =====================================================================
+
+\documentclass[11pt, letterpaper]{article}
+
+% ---------------------------------------------------------------------
+%  Packages
+% ---------------------------------------------------------------------
+\usepackage[
+    ignoreheadfoot,    % set margins without considering header and footer
+    top=0.6 cm,        % separation between body and page top edge
+    bottom=0.6 cm,     % separation between body and page bottom edge
+    left=1.6 cm,       % separation between body and page left edge
+    right=1.6 cm,      % separation between body and page right edge
+    footskip=0.5 cm,   % separation between body and footer
+]{geometry}            % page geometry
+\usepackage{titlesec}                     % custom section titles
+\usepackage{tabularx}                     % fixed-width tables
+\usepackage{array}                        % tabularx dependency
+\usepackage[dvipsnames]{xcolor}           % colored text
+\definecolor{primaryColor}{RGB}{0, 0, 0}  % primary color
+\usepackage{enumitem}                     % custom lists
+\usepackage{fontawesome5}                 % icons
+\usepackage{amsmath}                      % math
+\usepackage[
+    pdftitle={Adem Can's CV},
+    pdfauthor={Adem Can},
+    pdfcreator={LaTeX with RenderCV},
+    colorlinks=true,
+    urlcolor=primaryColor
+]{hyperref}                               % links, metadata, bookmarks
+\usepackage[pscoord]{eso-pic}             % floating text on page
+\usepackage{calc}                         % length calculations
+\usepackage{bookmark}                     % bookmarks
+\usepackage{lastpage}                     % total page count
+\usepackage{changepage}                   % one-column adjustwidth entries
+\usepackage{paracol}                      % two/three-column entries
+\usepackage{ifthen}                       % conditionals
+\usepackage{needspace}                    % avoid page break after section title
+\usepackage{iftex}                        % detect engine
+
+% Ensure the generated PDF is machine-readable / ATS-parsable:
+\ifPDFTeX
+    \input{glyphtounicode}
+    \pdfgentounicode=1
+    \usepackage[T1]{fontenc}
+    \usepackage[utf8]{inputenc}
+    \usepackage{lmodern}
+\fi
+
+\usepackage{charter}
+
+% ---------------------------------------------------------------------
+%  Layout settings
+% ---------------------------------------------------------------------
+\raggedright
+\AtBeginEnvironment{adjustwidth}{\partopsep0pt} % no space before adjustwidth
+\pagestyle{empty}                              % no header/footer
+\setcounter{secnumdepth}{0}                    % no section numbering
+\setlength{\parindent}{0pt}                    % no paragraph indent
+\setlength{\topskip}{0pt}                      % no top skip
+\setlength{\columnsep}{0.15cm}                 % column separation
+\pagenumbering{gobble}                         % no page numbers
+
+\titleformat{\section}{\needspace{4\baselineskip}\normalfont\normalsize}{}{0pt}{\MakeUppercase}[\vspace{0.6pt}\titlerule]
+\titlespacing{\section}{-1pt}{0.10 cm}{0.10 cm} % (left) (top) (bottom)
+
+\renewcommand\labelitemi{$\vcenter{\hbox{\small$\bullet$}}$} % custom bullet
+
+% ---------------------------------------------------------------------
+%  Reusable environments
+% ---------------------------------------------------------------------
+% Bullet list used inside each entry (highlights):
+\newenvironment{highlights}{
+    \begin{itemize}[
+        topsep=0.06 cm,
+        parsep=0.06 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=0 cm + 10pt
+    ]
+}{\end{itemize}}
+
+% Bullet list with tighter left margin:
+\newenvironment{highlightsforbulletentries}{
+    \begin{itemize}[
+        topsep=0.06 cm,
+        parsep=0.06 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=10pt
+    ]
+}{\end{itemize}}
+
+% Single-column entry wrapper:
+\newenvironment{onecolentry}{
+    \begin{adjustwidth}{0 cm + 0.00001 cm}{0 cm + 0.00001 cm}
+}{\end{adjustwidth}}
+
+% Smaller single-column entry:
+\newenvironment{bodyonecolentry}{
+    \begin{onecolentry}\small
+}{\end{onecolentry}}
+
+% Two-column entry (title left, dates right):
+\newenvironment{twocolentry}[2][]{
+    \onecolentry
+    \def\secondColumn{#2}
+    \setcolumnwidth{\fill, 4.5 cm}
+    \begin{paracol}{2}
+}{
+    \switchcolumn \raggedleft \secondColumn
+    \end{paracol}
+    \endonecolentry
+}
+
+% Smaller two-column entry:
+\newenvironment{bodytwocolentry}[2][]{
+    \begin{twocolentry}[#1]{#2}\small
+}{\end{twocolentry}}
+
+% Three-column entry:
+\newenvironment{threecolentry}[3][]{
+    \onecolentry
+    \def\thirdColumn{#3}
+    \setcolumnwidth{, \fill, 4.5 cm}
+    \begin{paracol}{3}
+    {\raggedright #2} \switchcolumn
+}{
+    \switchcolumn \raggedleft \thirdColumn
+    \end{paracol}
+    \endonecolentry
+}
+
+% Centered header block:
+\newenvironment{header}{
+    \setlength{\topsep}{0pt}\par\kern\topsep\centering\linespread{1.5}
+}{\par\kern\topsep}
+
+% Preserve the default href (no external-link arrow) for resume links:
+\let\hrefWithoutArrow\href
+
+% ---------------------------------------------------------------------
+%  Document body
+% ---------------------------------------------------------------------
+\begin{document}
+    \newcommand{\AND}{\unskip
+        \cleaders\copy\ANDbox\hskip\wd\ANDbox
+        \ignorespaces
+    }
+    \newsavebox\ANDbox
+    \sbox\ANDbox{$|$}
+
+    % ============================== HEADER ==============================
+    \begin{header}
+        \fontsize{20 pt}{20 pt}\selectfont Adem Can
+
+        \vspace{5 pt}
+
+        \normalsize
+        \mbox{\hrefWithoutArrow{mailto:ademfcan@gmail.com}{ademfcan@gmail.com}}%
+        \kern 5.0 pt\AND\kern 5.0 pt%
+        \mbox{\hrefWithoutArrow{tel:+1-206-851-7502}{+1 (206) 851 7502}}%
+        \kern 5.0 pt\AND\kern 5.0 pt%
+        \mbox{\hrefWithoutArrow{https://linkedin.com/in/ademfcan}{linkedin.com/in/ademfcan}}%
+        \kern 5.0 pt\AND\kern 5.0 pt%
+        \mbox{\hrefWithoutArrow{https://github.com/ademfcan}{github.com/ademfcan}}%
+    \end{header}
+
+    \vspace{5 pt - 0.1cm}
+
+    % ============================== EDUCATION ===========================
+    \section{Education}
+
+    % --- University of Washington ---
+    \begin{twocolentry}{June 2027}
+        \textbf{University of Washington, Paul G. Allen School of CSE}, Seattle, WA
+    \end{twocolentry}
+    \begin{bodyonecolentry}
+        BS in Computer Science \\
+        Foundations of Computing, Discrete Mathematics, Data Structures \& Parallelism, Software Design \& Implementation, Hardware-Software Interface, Software Tools, Advanced Linear Algebra
+    \end{bodyonecolentry}
+
+    \vspace{0.08 cm}
+
+    % --- Seattle Central College ---
+    \begin{twocolentry}{June 2025}
+        \textbf{Seattle Central College}, Seattle, WA
+    \end{twocolentry}
+    \begin{bodytwocolentry}{GPA: 3.87/4.0}
+        AS in Computer Science (Running Start dual-enrollment)
+    \end{bodytwocolentry}
+    \vspace{0.06 cm}
+    \begin{bodyonecolentry}
+        Data Structures \& Algorithms, Linear Algebra, Calculus I-III, Physics I-III, Differential Equations, Statistics, Computer Networking
+    \end{bodyonecolentry}
+
+    % ============================== EXPERIENCE ==========================
+    \section{Experience}
+
+    % --- Amazon Web Services ---
+    \begin{twocolentry}{June 2026 -- Sep 2026}
+        \textbf{Amazon Web Services (AWS)}, Seattle, WA
+    \end{twocolentry}
+    \vspace{0.08 cm}
+    \begin{bodyonecolentry}
+        Software Engineer Intern, Payments \& Fraud Prevention, AWS Fraud Business Orchestration
+        \begin{highlights}
+            \item Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod
+            \item Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod
+            \item Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod
+            \item Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod
+            \item Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod
+        \end{highlights}
+    \end{bodyonecolentry}
+
+    \vspace{0.12 cm}
+
+    % --- FIRST Robotics Competition ---
+    \begin{twocolentry}{January 2022 -- June 2025}
+        \textbf{FIRST Robotics Competition (FRC)} \hrefWithoutArrow{https://www.xbotrobotics.org/competitive-robotics}{Team XBOT 488}
+    \end{twocolentry}
+    \vspace{0.08 cm}
+    \begin{bodyonecolentry}
+        Student Software Engineer, Computer Vision + AI
+        \begin{highlights}
+            \item Implemented advanced algorithms to enable autonomous navigation and obstacle avoidance with 2-3 cm accuracy
+            \item Communicated technical accomplishments to judges, contributing to the Innovation in Control Award
+            \item Designed a modular python robotics framework that cut development time by 50\% by standardizing pipelines
+            \item Optimized a multi-device, multi-camera system with quantized YOLO CNN models running on NPUs, achieving 20-30 ms latency and a 9$\times$ speedup over CPU
+            \item Mentored 4 students in CV fundamentals, guiding hands-on learning and successful project execution
+        \end{highlights}
+    \end{bodyonecolentry}
+
+    \vspace{0.12 cm}
+
+    % --- Volunteer STEM Tutor ---
+    \begin{twocolentry}{June 2024 -- July 2024}
+        \textbf{Volunteer STEM Tutor} \hrefWithoutArrow{https://www.elcentrodelaraza.org/}{El Centro de la Raza}
+    \end{twocolentry}
+    \vspace{0.08 cm}
+    \begin{bodyonecolentry}
+        Hands-On Arduino Projects
+        \begin{highlights}
+            \item Initiated and led free Arduino tutoring program for underserved K-5 students at a local community center
+            \item Created an 8-week hands-on curriculum with over 20 original Arduino programs and guided projects
+            \item Taught and Guided 18 students in constructing introductory circuits, fostering interest in electronics and STEM
+        \end{highlights}
+    \end{bodyonecolentry}
+
+    % ============================== PROJECTS ============================
+    \section{Projects}
+
+    % --- Codestory (CLI + VS Code extension) ---
+    \begin{twocolentry}{Oct 2025 to Apr 2026}
+        \textbf{Codestory}
+    \end{twocolentry}
+    \vspace{0.08 cm}
+    \begin{bodyonecolentry}
+        \hrefWithoutArrow{https://github.com/CodeStoryBuild/CodeStoryCli}{github.com/CodeStoryBuild/CodeStoryCli} \;|\; \hrefWithoutArrow{https://github.com/CodeStoryBuild/CodeStoryView}{github.com/CodeStoryBuild/CodeStoryView}
+        \begin{highlights}
+            \item Built a Python AI Git CLI that keeps commit history clean and logical, with 5,000+ PyPI downloads
+            \item Splits a large diff into small, independent changes using tree-sitter-based semantic and mechanical clustering
+            \item Engineered rewrites against an in-memory commit index, so source files stay untouched for safe history cleanup
+            \item Packaged the CLI into a TypeScript + React VS Code extension with a visual commit graph and 1,000+ installs
+            \item Supports many model providers and offline local models like Ollama, with no API key needed
+        \end{highlights}
+    \end{bodyonecolentry}
+
+    \vspace{0.12 cm}
+
+    % --- Chess Application ---
+    \begin{twocolentry}{June 2023 - June 2025}
+        \textbf{Chess Application with Custom Engine (2400 ELO)}
+    \end{twocolentry}
+    \vspace{0.08 cm}
+    \begin{bodyonecolentry}
+        \hrefWithoutArrow{https://github.com/Ademfcan/chess}{https://github.com/ademfcan/chess}
+        \begin{highlights}
+            \item Built a high-performance chess engine in Java using advanced algorithms built on top of the Minimax algorithm
+            \item Developed a JavaFX chess app with animated visuals, campaign progression, local \& multiplayer, and AI simulations
+            \item Added advanced game analysis: board evaluation, move suggestions 15+ moves deep, and accuracy ranking
+            \item Hosted a lightweight backend on Tomcat (Azure VM) with MySQL database for user data persistence
+        \end{highlights}
+    \end{bodyonecolentry}
+
+    % ============================== SKILLS ==============================
+    \section{Skills}
+
+    \begin{bodyonecolentry}
+        \textbf{Languages:} Java, Python, C\#, SQL
+    \end{bodyonecolentry}
+
+    \vspace{0.12 cm}
+
+    \begin{bodyonecolentry}
+        \textbf{Tools/Technologies:} Linux, WSL, Git, Docker, Azure, .NET, OpenCV, PyTorch, LangGraph
+    \end{bodyonecolentry}
+
+    \vspace{0.12 cm}
+
+    \begin{bodyonecolentry}
+        \textbf{AI Tools:} GitHub Copilot (code generation), ChatGPT (planning),
+        Google AI Studio (debugging), Ollama (local LLMs)
+    \end{bodyonecolentry}
+
+\end{document}
